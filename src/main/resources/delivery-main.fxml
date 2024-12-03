@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.food_delivery.controller.delivery.DeliveryMainController"
+            prefHeight="600.0" prefWidth="800.0">
+    
+    <top>
+        <MenuBar>
+            <Menu text="订单">
+                <MenuItem text="可接订单" onAction="#showAvailableOrders"/>
+                <MenuItem text="我的配送" onAction="#showMyDeliveries"/>
+            </Menu>
+            <Menu text="账户">
+                <MenuItem text="个人信息" onAction="#showProfile"/>
+                <MenuItem text="退出登录" onAction="#logout"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    
+    <center>
+        <TabPane>
+            <Tab text="可接订单" closable="false">
+                <VBox spacing="10">
+                    <TableView fx:id="availableOrdersTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="orderIdColumn" text="订单号"/>
+                            <TableColumn fx:id="restaurantColumn" text="餐厅"/>
+                            <TableColumn fx:id="timeColumn" text="下单时间"/>
+                            <TableColumn fx:id="amountColumn" text="金额"/>
+                            <TableColumn fx:id="actionColumn" text="操作"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+            <Tab text="我的配送" closable="false">
+                <VBox spacing="10">
+                    <TableView fx:id="myDeliveriesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="orderIdColumn" text="订单号"/>
+                            <TableColumn fx:id="customerColumn" text="顾客"/>
+                            <TableColumn fx:id="statusColumn" text="状态"/>
+                            <TableColumn fx:id="actionColumn" text="操作"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane> 

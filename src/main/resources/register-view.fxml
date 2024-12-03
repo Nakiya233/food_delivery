@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.food_delivery.controller.RegisterController"
+      prefHeight="500.0" prefWidth="600.0">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Text text="用户注册" style="-fx-font-size: 24px;"/>
+    
+    <GridPane vgap="10" hgap="10" alignment="CENTER">
+        <Label text="用户名:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        
+        <Label text="密码:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        
+        <Label text="确认密码:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        
+        <Label text="用户类型:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <ComboBox fx:id="userTypeComboBox" promptText="选择用户类型" 
+                  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        
+        <Label text="手机号码:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        
+        <Label text="电子邮箱:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    </GridPane>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="注册" onAction="#handleRegister"/>
+        <Button text="返回" onAction="#handleBack"/>
+    </HBox>
+</VBox> 

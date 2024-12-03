@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.food_delivery.controller.restaurant.RestaurantMainController"
+            prefHeight="600.0" prefWidth="800.0">
+    
+    <top>
+        <MenuBar>
+            <Menu text="菜单">
+                <MenuItem text="菜单管理" onAction="#showMenuManagement"/>
+            </Menu>
+            <Menu text="订单">
+                <MenuItem text="订单管理" onAction="#showOrderManagement"/>
+            </Menu>
+            <Menu text="统计">
+                <MenuItem text="销售统计" onAction="#showSalesStatistics"/>
+            </Menu>
+            <Menu text="账户">
+                <MenuItem text="商家信息" onAction="#showProfile"/>
+                <MenuItem text="退出登录" onAction="#logout"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    
+    <center>
+        <TabPane>
+            <Tab text="待处理订单" closable="false">
+                <VBox spacing="10">
+                    <TableView fx:id="pendingOrdersTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="orderIdColumn" text="订单号"/>
+                            <TableColumn fx:id="customerColumn" text="顾客"/>
+                            <TableColumn fx:id="timeColumn" text="下单时间"/>
+                            <TableColumn fx:id="amountColumn" text="金额"/>
+                            <TableColumn fx:id="statusColumn" text="状态"/>
+                            <TableColumn fx:id="actionColumn" text="操作"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+            <Tab text="今日概览" closable="false">
+                <GridPane hgap="20" vgap="20" alignment="CENTER">
+                    <Label text="今日订单数:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="todayOrdersLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    
+                    <Label text="今日营业额:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="todayRevenueLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="待处理订单:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label fx:id="pendingOrdersLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                </GridPane>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane> 

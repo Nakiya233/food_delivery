@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.food_delivery.controller.customer.CustomerMainController"
+            prefHeight="600.0" prefWidth="800.0">
+    
+    <top>
+        <MenuBar>
+            <Menu text="订单">
+                <MenuItem text="我的订单" onAction="#showMyOrders"/>
+                <MenuItem text="订单历史" onAction="#showOrderHistory"/>
+            </Menu>
+            <Menu text="个人">
+                <MenuItem text="个人信息" onAction="#showProfile"/>
+                <MenuItem text="退出登录" onAction="#logout"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    
+    <center>
+        <TabPane>
+            <Tab text="餐厅列表" closable="false">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <HBox spacing="10" alignment="CENTER">
+                        <TextField fx:id="searchField" promptText="搜索餐厅"/>
+                        <Button text="搜索" onAction="#handleSearch"/>
+                    </HBox>
+                    <ListView fx:id="restaurantListView" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+            <Tab text="购物车" closable="false">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <ListView fx:id="cartListView" VBox.vgrow="ALWAYS"/>
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Label text="总计: "/>
+                        <Label fx:id="totalPriceLabel"/>
+                        <Button text="结算" onAction="#handleCheckout"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane> 

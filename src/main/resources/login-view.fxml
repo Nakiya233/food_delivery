@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.food_delivery.controller.LoginController"
+      prefHeight="400.0" prefWidth="600.0">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Text text="外卖配送系统" style="-fx-font-size: 24px;"/>
+    
+    <GridPane vgap="10" hgap="10" alignment="CENTER">
+        <Label text="用户名:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        
+        <Label text="密码:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        
+        <ComboBox fx:id="userTypeComboBox" promptText="选择用户类型" 
+                  GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    </GridPane>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="登录" onAction="#handleLogin"/>
+        <Button text="注册" onAction="#handleRegister"/>
+    </HBox>
+</VBox> 
