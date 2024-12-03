@@ -27,11 +27,11 @@
                 <VBox spacing="10">
                     <TableView fx:id="availableOrdersTable" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="orderIdColumn" text="订单号"/>
-                            <TableColumn fx:id="restaurantColumn" text="餐厅"/>
-                            <TableColumn fx:id="timeColumn" text="下单时间"/>
-                            <TableColumn fx:id="amountColumn" text="金额"/>
-                            <TableColumn fx:id="actionColumn" text="操作"/>
+                            <TableColumn fx:id="availableOrderIdColumn" text="订单号"/>
+                            <TableColumn fx:id="availableRestaurantColumn" text="餐厅"/>
+                            <TableColumn fx:id="availableTimeColumn" text="下单时间"/>
+                            <TableColumn fx:id="availableAmountColumn" text="金额"/>
+                            <TableColumn fx:id="availableActionColumn" text="操作"/>
                         </columns>
                     </TableView>
                 </VBox>
@@ -40,10 +40,10 @@
                 <VBox spacing="10">
                     <TableView fx:id="myDeliveriesTable" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="orderIdColumn" text="订单号"/>
-                            <TableColumn fx:id="customerColumn" text="顾客"/>
-                            <TableColumn fx:id="statusColumn" text="状态"/>
-                            <TableColumn fx:id="actionColumn" text="操作"/>
+                            <TableColumn fx:id="myDeliveryOrderIdColumn" text="订单号"/>
+                            <TableColumn fx:id="myDeliveryCustomerColumn" text="顾客"/>
+                            <TableColumn fx:id="myDeliveryStatusColumn" text="状态"/>
+                            <TableColumn fx:id="myDeliveryActionColumn" text="操作"/>
                         </columns>
                     </TableView>
                 </VBox>
