@@ -1,5 +1,6 @@
 package com.example.food_delivery.controller.restaurant;
 
+import com.example.food_delivery.controller.LoginController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -40,6 +41,6 @@ public class RestaurantMainController {
 
     @FXML
     private void logout() {
-        // 退出登录
+        LoginController.logout(pendingOrdersTable);
     }
 } 

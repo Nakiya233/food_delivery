@@ -1,5 +1,6 @@
 package com.example.food_delivery.controller.customer;
 
+import com.example.food_delivery.controller.LoginController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -49,8 +50,7 @@ public class CustomerMainController {
 
     @FXML
     private void logout() {
-        // 退出登录
-        showAlert("提示", "退出登录功能尚未实现");
+        LoginController.logout(restaurantListView);
     }
 
     private void showAlert(String title, String content) {

@@ -61,4 +61,20 @@ public class LoginController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+    public static void logout(Control control) {
+        try {
+            FXMLLoader loader = new FXMLLoader(LoginController.class.getResource("/login-view.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) control.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("错误");
+            alert.setHeaderText(null);
+            alert.setContentText("退出登录失败: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
 } 
