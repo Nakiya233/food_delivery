@@ -1,10 +1,15 @@
 package com.example.food_delivery.controller;
 
+import com.example.food_delivery.util.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginController {
     @FXML
@@ -21,7 +26,20 @@ public class LoginController {
 
     @FXML
     private void handleLogin() {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
         String userType = userTypeComboBox.getValue();
+
+        if (username.isEmpty() || password.isEmpty() || userType == null) {
+            showAlert("错误", "请填写完整信息");
+            return;
+        }
+
+        if (!validateUserType(username, userType)) {
+            showAlert("错误", "用户类型不匹配");
+            return;
+        }
+
         try {
             String fxmlFile = switch (userType) {
                 case "顾客" -> "/customer-main.fxml";
@@ -38,6 +56,29 @@ public class LoginController {
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("错误", "登录失败: " + e.getMessage());
+        }
+    }
+
+    private boolean validateUserType(String username, String userType) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT user_type FROM users WHERE username = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String actualUserType = rs.getString("user_type");
+                return switch (userType) {
+                    case "顾客" -> actualUserType.equals("顾客");
+                    case "商家" -> actualUserType.equals("商家");
+                    case "配送员" -> actualUserType.equals("配送员");
+                    default -> false;
+                };
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
