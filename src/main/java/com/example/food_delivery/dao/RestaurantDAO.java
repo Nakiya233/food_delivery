@@ -195,4 +195,34 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
         
         return restaurants;
     }
+    
+    public List<Restaurant> searchByName(String query) {
+        List<Restaurant> restaurants = new ArrayList<>();
+        String sql = "SELECT * FROM restaurants WHERE restaurant_name LIKE ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, "%" + query + "%");
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                Restaurant restaurant = new Restaurant();
+                restaurant.setRestaurantId(rs.getInt("restaurant_id"));
+                restaurant.setRestaurantName(rs.getString("restaurant_name"));
+                restaurant.setLocation(rs.getString("location"));
+                restaurant.setPhone(rs.getString("phone"));
+                restaurant.setRating(rs.getDouble("rating"));
+                restaurant.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+                restaurant.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
+                
+                restaurants.add(restaurant);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return restaurants;
+    }
 } 
