@@ -8,6 +8,7 @@ public class Restaurant {
     private String location;
     private String phone;
     private Double rating;
+    private Integer ownerId;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
@@ -20,6 +21,14 @@ public class Restaurant {
 
     // Getters and Setters
     // ... (生成所有属性的getter和setter方法)
+
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
+    }
 
     public Integer getRestaurantId() {
         return restaurantId;

@@ -35,8 +35,8 @@ public class LoginController {
             return;
         }
 
-        if (!validateUserType(username, userType)) {
-            showAlert("错误", "用户类型不匹配");
+        if (!validateUserType(username,password, userType)) {
+            showAlert("错误", "用户类型不匹配或密码错误");
             return;
         }
 
@@ -59,27 +59,38 @@ public class LoginController {
         }
     }
 
-    private boolean validateUserType(String username, String userType) {
+    private boolean validateUserType(String username, String password, String userType) {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT user_type FROM users WHERE username = ?";
+            // 查询用户的密码和用户类型
+            String sql = "SELECT password, user_type FROM users WHERE username = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String actualUserType = rs.getString("user_type");
-                return switch (userType) {
-                    case "顾客" -> actualUserType.equals("顾客");
-                    case "商家" -> actualUserType.equals("商家");
-                    case "配送员" -> actualUserType.equals("配送员");
-                    default -> false;
-                };
+                String actualPassword = rs.getString("password"); // 从结果集中获取实际密码
+                String actualUserType = rs.getString("user_type"); // 从结果集中获取实际用户类型
+
+                // 验证密码
+                if (isPasswordCorrect(password, actualPassword)) {
+                    // 密码正确时，继续验证用户类型
+                    return switch (userType) {
+                        case "顾客" -> actualUserType.equals("顾客");
+                        case "商家" -> actualUserType.equals("商家");
+                        case "配送员" -> actualUserType.equals("配送员");
+                        default -> false;
+                    };
+                }
             }
-            return false;
+            return false; // 如果没有找到用户，或者密码不正确，返回 false
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
+    private boolean isPasswordCorrect(String inputPassword, String storedPassword) {
+        // 通常使用哈希算法进行密码比较，这里简单示范：
+        return inputPassword.equals(storedPassword); // 注意：这仅为示例，真实情况下应使用加密比较
     }
 
     @FXML
