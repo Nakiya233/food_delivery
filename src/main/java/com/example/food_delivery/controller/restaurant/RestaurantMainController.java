@@ -4,10 +4,8 @@ import com.example.food_delivery.controller.LoginController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
 
 public class RestaurantMainController {
     @FXML

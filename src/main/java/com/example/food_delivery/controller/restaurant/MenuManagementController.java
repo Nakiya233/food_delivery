@@ -25,6 +25,8 @@ public class MenuManagementController {
     private TableColumn<MenuItem, Integer> stockColumn;
     @FXML
     private TableColumn<MenuItem, Void> actionColumn;
+    @FXML
+    private TableColumn<MenuItem, String> restaurantColumn;
 
     private MenuItemDAO menuItemDAO;
 
@@ -37,6 +39,7 @@ public class MenuManagementController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
+        restaurantColumn.setCellValueFactory(new PropertyValueFactory<>("restaurantId"));
         
         // 设置操作列
         setupActionColumn();

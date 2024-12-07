@@ -26,11 +26,12 @@
             </padding>
             <TableView fx:id="menuItemTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="nameColumn" text="菜品名称"/>
-                    <TableColumn fx:id="descriptionColumn" text="描述"/>
-                    <TableColumn fx:id="priceColumn" text="价格"/>
-                    <TableColumn fx:id="stockColumn" text="库存"/>
-                    <TableColumn fx:id="actionColumn" text="操作"/>
+                    <TableColumn fx:id="nameColumn" text="菜品名称" prefWidth="100"/>
+                    <TableColumn fx:id="descriptionColumn" text="描述" prefWidth="200"/>
+                    <TableColumn fx:id="priceColumn" text="价格" prefWidth="80"/>
+                    <TableColumn fx:id="stockColumn" text="库存" prefWidth="80"/>
+                    <TableColumn fx:id="restaurantColumn" text="餐厅" prefWidth="120"/>
+                    <TableColumn fx:id="actionColumn" text="操作" prefWidth="100"/>
                 </columns>
             </TableView>
         </VBox>
