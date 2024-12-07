@@ -11,6 +11,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import java.math.BigDecimal;
 import java.util.List;
+import javafx.beans.property.SimpleStringProperty;
+import com.example.food_delivery.dao.RestaurantDAO;
+import com.example.food_delivery.model.Restaurant;
 
 public class MenuManagementController {
     @FXML
@@ -33,13 +36,22 @@ public class MenuManagementController {
     @FXML
     private void initialize() {
         menuItemDAO = new MenuItemDAO();
+        RestaurantDAO restaurantDAO = new RestaurantDAO();
         
         // 设置列的单元格值工厂
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
-        restaurantColumn.setCellValueFactory(new PropertyValueFactory<>("restaurantId"));
+        
+        // 自定义餐厅列的值工厂，根据restaurantId查询餐厅名称
+        restaurantColumn.setCellValueFactory(cellData -> {
+            Integer restaurantId = cellData.getValue().getRestaurantId();
+            String restaurantName = restaurantDAO.findById(restaurantId)
+                    .map(Restaurant::getRestaurantName)
+                    .orElse("未知餐厅");
+            return new SimpleStringProperty(restaurantName);
+        });
         
         // 设置操作列
         setupActionColumn();
