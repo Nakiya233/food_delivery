@@ -14,6 +14,11 @@ import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import com.example.food_delivery.dao.RestaurantDAO;
 import com.example.food_delivery.model.Restaurant;
+import javafx.scene.layout.GridPane;
+import javafx.geometry.Insets;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ButtonBar;
 
 public class MenuManagementController {
     @FXML
@@ -115,8 +120,83 @@ public class MenuManagementController {
     }
 
     private void showMenuItemDialog(MenuItem item) {
-        // 显示添加/编辑菜品对话框
-        // 这部分将在后续实现
+        try{
+            // 创建对话框
+            Dialog<MenuItem> dialog = new Dialog<>();
+            dialog.setTitle(item == null ? "添加菜品" : "编辑菜品");
+            dialog.setHeaderText(null);
+
+            // 设置确认和取消按钮
+            ButtonType saveButtonType = new ButtonType("保存", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+            // 创建表单内容
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField nameField = new TextField();
+            TextField descriptionField = new TextField();
+            TextField priceField = new TextField();
+            TextField stockField = new TextField();
+            TextField restaurantIdField = new TextField();
+
+            // 如果是编辑模式，填充现有数据
+            if (item != null) {
+                nameField.setText(item.getItemName());
+                descriptionField.setText(item.getDescription());
+                priceField.setText(item.getPrice().toString());
+                stockField.setText(String.valueOf(item.getStockQuantity()));
+                restaurantIdField.setText(String.valueOf(item.getRestaurantId()));
+            }
+
+            grid.add(new Label("菜品名称:"), 0, 0);
+            grid.add(nameField, 1, 0);
+            grid.add(new Label("描述:"), 0, 1);
+            grid.add(descriptionField, 1, 1);
+            grid.add(new Label("价格:"), 0, 2);
+            grid.add(priceField, 1, 2);
+            grid.add(new Label("库存:"), 0, 3);
+            grid.add(stockField, 1, 3);
+            grid.add(new Label("餐厅ID:"), 0, 4);
+            grid.add(restaurantIdField, 1, 4);
+
+            dialog.getDialogPane().setContent(grid);
+
+            // 设置结果转换器
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == saveButtonType) {
+                    try {
+                        MenuItem menuItem = item == null ? new MenuItem() : item;
+                        menuItem.setItemName(nameField.getText());
+                        menuItem.setDescription(descriptionField.getText());
+                        menuItem.setPrice(new BigDecimal(priceField.getText()));
+                        menuItem.setStockQuantity(Integer.parseInt(stockField.getText()));
+                        menuItem.setRestaurantId(Integer.parseInt(restaurantIdField.getText()));
+                        return menuItem;
+                    } catch (NumberFormatException e) {
+                        showAlert("错误", "请输入有效的数字");
+                        return null;
+                    }
+                }
+                return null;
+            });
+
+            // 显示对话框并处理结果
+            dialog.showAndWait().ifPresent(menuItem -> {
+                if (item == null) {
+                    menuItemDAO.save(menuItem);
+                } else {
+                    menuItemDAO.update(menuItem);
+                }
+                loadMenuItems();
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("错误", "处理菜品时出现错误");
+        }
     }
 
     @FXML
