@@ -3,6 +3,11 @@ package com.example.food_delivery.controller.restaurant;
 import com.example.food_delivery.controller.LoginController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 public class RestaurantMainController {
     @FXML
@@ -21,7 +26,19 @@ public class RestaurantMainController {
 
     @FXML
     private void showMenuManagement() {
-        // 显示菜单管理
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/menu-management.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) pendingOrdersTable.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("错误");
+            alert.setHeaderText(null);
+            alert.setContentText("无法打开菜单管理界面: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -42,5 +59,12 @@ public class RestaurantMainController {
     @FXML
     private void logout() {
         LoginController.logout(pendingOrdersTable);
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 } 

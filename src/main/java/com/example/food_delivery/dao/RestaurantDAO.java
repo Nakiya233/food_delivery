@@ -12,8 +12,8 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
     
     @Override
     public Restaurant save(Restaurant restaurant) {
-        String sql = "INSERT INTO restaurants (restaurant_name, location, phone, rating, create_time, update_time) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO restaurants (restaurant_name, location, phone, rating, owner_id, create_time, update_time) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -22,8 +22,9 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
             pstmt.setString(2, restaurant.getLocation());
             pstmt.setString(3, restaurant.getPhone());
             pstmt.setDouble(4, restaurant.getRating());
-            pstmt.setTimestamp(5, Timestamp.valueOf(restaurant.getCreateTime()));
-            pstmt.setTimestamp(6, Timestamp.valueOf(restaurant.getUpdateTime()));
+            pstmt.setInt(5, restaurant.getOwnerId());
+            pstmt.setTimestamp(6, Timestamp.valueOf(restaurant.getCreateTime()));
+            pstmt.setTimestamp(7, Timestamp.valueOf(restaurant.getUpdateTime()));
             
             int affectedRows = pstmt.executeUpdate();
             
@@ -63,6 +64,7 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
                 restaurant.setLocation(rs.getString("location"));
                 restaurant.setPhone(rs.getString("phone"));
                 restaurant.setRating(rs.getDouble("rating"));
+                restaurant.setOwnerId(rs.getInt("owner_id"));
                 restaurant.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 restaurant.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
                 
@@ -92,6 +94,7 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
                 restaurant.setLocation(rs.getString("location"));
                 restaurant.setPhone(rs.getString("phone"));
                 restaurant.setRating(rs.getDouble("rating"));
+                restaurant.setOwnerId(rs.getInt("owner_id"));
                 restaurant.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 restaurant.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
                 
@@ -108,7 +111,7 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
     @Override
     public Restaurant update(Restaurant restaurant) {
         String sql = "UPDATE restaurants SET restaurant_name = ?, location = ?, phone = ?, " +
-                    "rating = ?, update_time = ? WHERE restaurant_id = ?";
+                    "rating = ?, owner_id = ?, update_time = ? WHERE restaurant_id = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -117,8 +120,9 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
             pstmt.setString(2, restaurant.getLocation());
             pstmt.setString(3, restaurant.getPhone());
             pstmt.setDouble(4, restaurant.getRating());
-            pstmt.setTimestamp(5, Timestamp.valueOf(restaurant.getUpdateTime()));
-            pstmt.setInt(6, restaurant.getRestaurantId());
+            pstmt.setInt(5, restaurant.getOwnerId());
+            pstmt.setTimestamp(6, Timestamp.valueOf(restaurant.getUpdateTime()));
+            pstmt.setInt(7, restaurant.getRestaurantId());
             
             pstmt.executeUpdate();
             
@@ -183,6 +187,7 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
                 restaurant.setLocation(rs.getString("location"));
                 restaurant.setPhone(rs.getString("phone"));
                 restaurant.setRating(rs.getDouble("rating"));
+                restaurant.setOwnerId(rs.getInt("owner_id"));
                 restaurant.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 restaurant.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
                 
@@ -213,6 +218,7 @@ public class RestaurantDAO implements BaseDAO<Restaurant, Integer> {
                 restaurant.setLocation(rs.getString("location"));
                 restaurant.setPhone(rs.getString("phone"));
                 restaurant.setRating(rs.getDouble("rating"));
+                restaurant.setOwnerId(rs.getInt("owner_id"));
                 restaurant.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 restaurant.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
                 
