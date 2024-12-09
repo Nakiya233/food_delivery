@@ -105,8 +105,8 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
                 order.setUserId(rs.getInt("user_id"));
                 order.setRestaurantId(rs.getInt("restaurant_id"));
                 order.setTotalPrice(rs.getBigDecimal("total_price"));
-                order.setOrderStatus(Order.OrderStatus.valueOf(rs.getString("order_status")));
-                order.setPaymentStatus(Order.PaymentStatus.valueOf(rs.getString("payment_status")));
+                order.setOrderStatus(convertToOrderStatus(rs.getString("order_status")));
+                order.setPaymentStatus(convertToPaymentStatus(rs.getString("payment_status")));
                 order.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 order.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
                 
@@ -228,5 +228,23 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         }
         
         return orders;
+    }
+    
+    private Order.OrderStatus convertToOrderStatus(String status) {
+        for (Order.OrderStatus orderStatus : Order.OrderStatus.values()) {
+            if (orderStatus.getValue().equals(status)) {
+                return orderStatus;
+            }
+        }
+        return Order.OrderStatus.PENDING; // 默认值
+    }
+    
+    private Order.PaymentStatus convertToPaymentStatus(String status) {
+        for (Order.PaymentStatus paymentStatus : Order.PaymentStatus.values()) {
+            if (paymentStatus.getValue().equals(status)) {
+                return paymentStatus;
+            }
+        }
+        return Order.PaymentStatus.PENDING; // 默认值
     }
 } 

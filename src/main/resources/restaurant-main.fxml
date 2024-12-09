@@ -37,7 +37,6 @@
                             <TableColumn fx:id="timeColumn" text="下单时间"/>
                             <TableColumn fx:id="amountColumn" text="金额"/>
                             <TableColumn fx:id="statusColumn" text="状态"/>
-                            <TableColumn fx:id="actionColumn" text="操作"/>
                         </columns>
                     </TableView>
                 </VBox>

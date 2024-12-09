@@ -64,8 +64,8 @@ public class UserDAO implements BaseDAO<User, Integer> {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
+                user.setUserType(convertToUserType(rs.getString("user_type")));
                 user.setPhone(rs.getString("phone"));
-                user.setUserType(User.UserType.valueOf(rs.getString("user_type")));
                 user.setAddress(rs.getString("address"));
                 user.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 user.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
@@ -203,5 +203,14 @@ public class UserDAO implements BaseDAO<User, Integer> {
         }
         
         return Optional.empty();
+    }
+    
+    private User.UserType convertToUserType(String type) {
+        for (User.UserType userType : User.UserType.values()) {
+            if (userType.getValue().equals(type)) {
+                return userType;
+            }
+        }
+        return User.UserType.CUSTOMER; // 默认值
     }
 } 

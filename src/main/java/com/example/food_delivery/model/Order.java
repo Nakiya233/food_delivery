@@ -17,10 +17,8 @@ public class Order {
     private List<OrderItem> orderItems;
 
     public enum OrderStatus {
-        PENDING_PAYMENT("待支付"),
+        PENDING("待支付"),
         PAID("已支付"),
-        ACCEPTED("已接单"),
-        DELIVERING("配送中"),
         COMPLETED("已完成"),
         CANCELLED("已取消");
 
@@ -56,7 +54,7 @@ public class Order {
         this.createTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();
         this.orderItems = new ArrayList<>();
-        this.orderStatus = OrderStatus.PENDING_PAYMENT;
+        this.orderStatus = OrderStatus.PENDING;
         this.paymentStatus = PaymentStatus.PENDING;
         this.totalPrice = BigDecimal.ZERO;
     }
