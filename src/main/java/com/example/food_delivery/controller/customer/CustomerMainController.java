@@ -8,6 +8,9 @@ import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.List;
+import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 
 public class CustomerMainController {
     @FXML
@@ -46,6 +49,15 @@ public class CustomerMainController {
         });
 
         loadRestaurants();
+
+        restaurantListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // 双击事件
+                Restaurant selectedRestaurant = restaurantListView.getSelectionModel().getSelectedItem();
+                if (selectedRestaurant != null) {
+                    showRestaurantMenu(selectedRestaurant);
+                }
+            }
+        });
     }
 
     private void loadRestaurants() {
@@ -101,5 +113,21 @@ public class CustomerMainController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private void showRestaurantMenu(Restaurant restaurant) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/restaurant-menu.fxml"));
+            Scene scene = new Scene(loader.load());
+            
+            RestaurantMenuController controller = loader.getController();
+            controller.setRestaurant(restaurant);
+            
+            Stage stage = (Stage) restaurantListView.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("错误", "无法打开餐厅菜单: " + e.getMessage());
+        }
     }
 } 

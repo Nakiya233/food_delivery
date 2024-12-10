@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.food_delivery.controller.customer.RestaurantMenuController"
+            prefHeight="600.0" prefWidth="800.0">
+    
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="返回" onAction="#handleBack"/>
+                <Label fx:id="restaurantNameLabel" style="-fx-font-size: 18px;"/>
+            </HBox>
+            <Label fx:id="restaurantInfoLabel"/>
+        </VBox>
+    </top>
+    
+    <center>
+        <TableView fx:id="menuItemTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="菜品名称" prefWidth="150"/>
+                <TableColumn fx:id="descriptionColumn" text="描述" prefWidth="200"/>
+                <TableColumn fx:id="priceColumn" text="价格" prefWidth="100"/>
+                <TableColumn fx:id="actionColumn" text="操作" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane> 
