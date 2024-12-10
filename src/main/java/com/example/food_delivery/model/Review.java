@@ -6,7 +6,7 @@ public class Review {
     private Integer reviewId;
     private Integer orderId;
     private Integer userId;
-    private Integer rating;
+    private Double rating;
     private String comment;
     private LocalDateTime createTime;
 
@@ -42,11 +42,11 @@ public class Review {
         this.userId = userId;
     }
 
-    public Integer getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 

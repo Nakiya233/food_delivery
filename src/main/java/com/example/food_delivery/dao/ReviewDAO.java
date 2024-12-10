@@ -20,7 +20,7 @@ public class ReviewDAO implements BaseDAO<Review, Integer> {
             
             pstmt.setInt(1, review.getOrderId());
             pstmt.setInt(2, review.getUserId());
-            pstmt.setInt(3, review.getRating());
+            pstmt.setDouble(3, review.getRating());
             pstmt.setString(4, review.getComment());
             pstmt.setTimestamp(5, Timestamp.valueOf(review.getCreateTime()));
             
@@ -60,7 +60,7 @@ public class ReviewDAO implements BaseDAO<Review, Integer> {
                 review.setReviewId(rs.getInt("review_id"));
                 review.setOrderId(rs.getInt("order_id"));
                 review.setUserId(rs.getInt("user_id"));
-                review.setRating(rs.getInt("rating"));
+                review.setRating(rs.getDouble("rating"));
                 review.setComment(rs.getString("comment"));
                 review.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 
@@ -88,7 +88,7 @@ public class ReviewDAO implements BaseDAO<Review, Integer> {
                 review.setReviewId(rs.getInt("review_id"));
                 review.setOrderId(rs.getInt("order_id"));
                 review.setUserId(rs.getInt("user_id"));
-                review.setRating(rs.getInt("rating"));
+                review.setRating(rs.getDouble("rating"));
                 review.setComment(rs.getString("comment"));
                 review.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 
@@ -112,7 +112,7 @@ public class ReviewDAO implements BaseDAO<Review, Integer> {
             
             pstmt.setInt(1, review.getOrderId());
             pstmt.setInt(2, review.getUserId());
-            pstmt.setInt(3, review.getRating());
+            pstmt.setDouble(3, review.getRating());
             pstmt.setString(4, review.getComment());
             pstmt.setInt(5, review.getReviewId());
             
@@ -177,7 +177,7 @@ public class ReviewDAO implements BaseDAO<Review, Integer> {
                 review.setReviewId(rs.getInt("review_id"));
                 review.setOrderId(rs.getInt("order_id"));
                 review.setUserId(rs.getInt("user_id"));
-                review.setRating(rs.getInt("rating"));
+                review.setRating(rs.getDouble("rating"));
                 review.setComment(rs.getString("comment"));
                 review.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 
@@ -205,7 +205,7 @@ public class ReviewDAO implements BaseDAO<Review, Integer> {
                 review.setReviewId(rs.getInt("review_id"));
                 review.setOrderId(rs.getInt("order_id"));
                 review.setUserId(rs.getInt("user_id"));
-                review.setRating(rs.getInt("rating"));
+                review.setRating(rs.getDouble("rating"));
                 review.setComment(rs.getString("comment"));
                 review.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 
@@ -217,5 +217,38 @@ public class ReviewDAO implements BaseDAO<Review, Integer> {
         }
         
         return Optional.empty();
+    }
+    public List<Review> findByRestaurantId(Integer restaurantId) {
+        List<Review> reviews = new ArrayList<>();
+        String sql = """
+            SELECT r.* FROM reviews r
+            JOIN orders o ON r.order_id = o.order_id
+            WHERE o.restaurant_id = ?
+            ORDER BY r.create_time DESC
+        """;
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, restaurantId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                Review review = new Review();
+                review.setReviewId(rs.getInt("review_id"));
+                review.setOrderId(rs.getInt("order_id"));
+                review.setUserId(rs.getInt("user_id"));
+                review.setRating(rs.getDouble("rating"));
+                review.setComment(rs.getString("comment"));
+                review.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+                
+                reviews.add(review);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return reviews;
     }
 } 

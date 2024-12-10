@@ -23,13 +23,32 @@
     </top>
     
     <center>
-        <TableView fx:id="menuItemTable" VBox.vgrow="ALWAYS">
-            <columns>
-                <TableColumn fx:id="nameColumn" text="菜品名称" prefWidth="150"/>
-                <TableColumn fx:id="descriptionColumn" text="描述" prefWidth="200"/>
-                <TableColumn fx:id="priceColumn" text="价格" prefWidth="100"/>
-                <TableColumn fx:id="actionColumn" text="操作" prefWidth="100"/>
-            </columns>
-        </TableView>
+        <TabPane>
+            <Tab text="菜单" closable="false">
+                <TableView fx:id="menuItemTable">
+                    <columns>
+                        <TableColumn fx:id="nameColumn" text="菜品名称" prefWidth="150"/>
+                        <TableColumn fx:id="descriptionColumn" text="描述" prefWidth="200"/>
+                        <TableColumn fx:id="priceColumn" text="价格" prefWidth="100"/>
+                        <TableColumn fx:id="actionColumn" text="操作" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </Tab>
+            <Tab text="评论" closable="false">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <TableView fx:id="reviewTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="reviewUserColumn" text="用户" prefWidth="100"/>
+                            <TableColumn fx:id="reviewRatingColumn" text="评分" prefWidth="80"/>
+                            <TableColumn fx:id="reviewCommentColumn" text="评论" prefWidth="300"/>
+                            <TableColumn fx:id="reviewTimeColumn" text="时间" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
     </center>
-</BorderPane> 
+</BorderPane>
