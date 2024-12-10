@@ -99,7 +99,15 @@ public class CustomerMainController {
 
     @FXML
     private void showProfile() {
-        showAlert("提示", "个人信息功能尚未实现");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/profile-view.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) restaurantListView.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("错误", "无法打开个人信息界面: " + e.getMessage());
+        }
     }
 
     @FXML

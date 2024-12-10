@@ -19,6 +19,8 @@ public class LoginController {
     @FXML
     private ComboBox<String> userTypeComboBox;
 
+    private static String currentUserName;
+
     @FXML
     private void initialize() {
         userTypeComboBox.getItems().addAll("顾客", "商家", "配送员");
@@ -52,6 +54,7 @@ public class LoginController {
             Scene scene = new Scene(loader.load());
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(scene);
+            setCurrentUserName(username);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,5 +131,12 @@ public class LoginController {
             alert.setContentText("退出登录失败: " + e.getMessage());
             alert.showAndWait();
         }
+    }
+    public static String getCurrentUserName() {
+        return currentUserName;
+    }
+    
+    public static void setCurrentUserName(String userName) {
+        currentUserName = userName;
     }
 } 

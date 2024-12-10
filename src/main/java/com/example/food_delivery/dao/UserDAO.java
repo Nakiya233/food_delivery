@@ -190,7 +190,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
                 user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
                 user.setPhone(rs.getString("phone"));
-                user.setUserType(User.UserType.valueOf(rs.getString("user_type")));
+                user.setUserType(convertToUserType(rs.getString("user_type")));
                 user.setAddress(rs.getString("address"));
                 user.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 user.setUpdateTime(rs.getTimestamp("update_time").toLocalDateTime());
