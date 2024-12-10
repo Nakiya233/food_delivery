@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.food_delivery.controller.restaurant.OrderManagementController"
+            prefHeight="600.0" prefWidth="800.0">
+    
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="返回" onAction="#handleBack"/>
+        </HBox>
+    </top>
+    
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <TableView fx:id="orderTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="orderIdColumn" text="订单号" prefWidth="80"/>
+                    <TableColumn fx:id="customerColumn" text="顾客" prefWidth="100"/>
+                    <TableColumn fx:id="timeColumn" text="下单时间" prefWidth="150"/>
+                    <TableColumn fx:id="amountColumn" text="金额" prefWidth="80"/>
+                    <TableColumn fx:id="statusColumn" text="状态" prefWidth="100"/>
+                    <TableColumn fx:id="actionColumn" text="操作" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane> 

@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.Control;
 
 public class RestaurantMainController {
     @FXML
@@ -38,6 +39,7 @@ public class RestaurantMainController {
     @FXML
     private Label pendingOrdersLabel;
 
+
     private UserDAO userDAO;
 
     private OrderDAO orderDAO;
@@ -55,7 +57,6 @@ public class RestaurantMainController {
 
         customerColumn.setCellValueFactory(cellData -> {
             Integer userId = cellData.getValue().getUserId();
-            // 假设有 UserDAO 来查询用户信息
             String customerName = userDAO.findById(userId)
                     .map(User::getUsername)
                     .orElse("未知用户");
@@ -79,7 +80,6 @@ public class RestaurantMainController {
     }
 
     private void loadPendingOrders() {
-        // 假设有 OrderDAO 来查询订单
         List<Order> orders = orderDAO.findAll();
         pendingOrdersTable.getItems().setAll(orders);
     }
@@ -103,7 +103,15 @@ public class RestaurantMainController {
 
     @FXML
     private void showOrderManagement() {
-        // 显示订单管理
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/order-management.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) pendingOrdersTable.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("错误", "无法打开订单管理界面: " + e.getMessage());
+        }
     }
 
     @FXML
