@@ -45,6 +45,7 @@
                     <HBox spacing="10" alignment="CENTER_RIGHT">
                         <Label text="总计: "/>
                         <Label fx:id="totalPriceLabel"/>
+                        <Button text="清空购物车" onAction="#handleClearCart"/>
                         <Button text="结算" onAction="#handleCheckout"/>
                     </HBox>
                 </VBox>

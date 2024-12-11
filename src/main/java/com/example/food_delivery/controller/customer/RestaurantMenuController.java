@@ -4,6 +4,7 @@ import com.example.food_delivery.model.MenuItem;
 import com.example.food_delivery.model.Restaurant;
 import com.example.food_delivery.model.Review;
 import com.example.food_delivery.model.User;
+import com.example.food_delivery.model.CartItem;
 import com.example.food_delivery.dao.MenuItemDAO;
 import com.example.food_delivery.dao.ReviewDAO;
 import com.example.food_delivery.dao.UserDAO;
@@ -48,51 +49,52 @@ public class RestaurantMenuController {
     private Restaurant restaurant;
     private MenuItemDAO menuItemDAO;
     private ReviewDAO reviewDAO;
-private UserDAO userDAO;
+    private UserDAO userDAO;
+    private CustomerMainController mainController;
 
     @FXML
-private void initialize() {
-    menuItemDAO = new MenuItemDAO();
-    reviewDAO = new ReviewDAO();
-    userDAO = new UserDAO();
-    
-    // 设置菜单列的值工厂
-    nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
-    descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-    priceColumn.setCellValueFactory(cellData -> 
-        new SimpleStringProperty("¥" + cellData.getValue().getPrice().toString()));
-    
-    // 设置评论列的值工厂
-    reviewUserColumn.setCellValueFactory(cellData -> {
-        Integer userId = cellData.getValue().getUserId();
-        String username = userDAO.findById(userId)
-                .map(User::getUsername)
-                .orElse("未知用户");
-        return new SimpleStringProperty(username);
-    });
-    
-    reviewRatingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-    reviewCommentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
-    reviewTimeColumn.setCellValueFactory(cellData -> 
-        new SimpleStringProperty(cellData.getValue().getCreateTime()
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
-    
-    // 设置添加到购物车按钮
-    setupActionColumn();
-}
+    private void initialize() {
+        menuItemDAO = new MenuItemDAO();
+        reviewDAO = new ReviewDAO();
+        userDAO = new UserDAO();
+        
+        // 设置菜单列的值工厂
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        priceColumn.setCellValueFactory(cellData -> 
+            new SimpleStringProperty("¥" + cellData.getValue().getPrice().toString()));
+        
+        // 设置评论列的值工厂
+        reviewUserColumn.setCellValueFactory(cellData -> {
+            Integer userId = cellData.getValue().getUserId();
+            String username = userDAO.findById(userId)
+                    .map(User::getUsername)
+                    .orElse("未知用户");
+            return new SimpleStringProperty(username);
+        });
+        
+        reviewRatingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        reviewCommentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+        reviewTimeColumn.setCellValueFactory(cellData -> 
+            new SimpleStringProperty(cellData.getValue().getCreateTime()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
+        
+        // 设置添加到购物车按钮
+        setupActionColumn();
+    }
 
-public void setRestaurant(Restaurant restaurant) {
-    this.restaurant = restaurant;
-    updateRestaurantInfo();
-    loadMenuItems();
-    loadReviews();
-}
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+        updateRestaurantInfo();
+        loadMenuItems();
+        loadReviews();
+    }
 
-private void loadReviews() {
-    // 获取与该餐厅相关的所有订单的评论
-    List<Review> reviews = reviewDAO.findByRestaurantId(restaurant.getRestaurantId());
-    reviewTable.getItems().setAll(reviews);
-}
+    private void loadReviews() {
+        // 获取与该餐厅相关的所有订单的评论
+        List<Review> reviews = reviewDAO.findByRestaurantId(restaurant.getRestaurantId());
+        reviewTable.getItems().setAll(reviews);
+    }
 
     // public void setRestaurant(Restaurant restaurant) {
     //     this.restaurant = restaurant;
@@ -131,8 +133,25 @@ private void loadReviews() {
     }
 
     private void handleAddToCart(MenuItem item) {
-        // TODO: 实现添加到购物车的功能
-        showAlert("提示", "添加到购物车功能尚未实现");
+        try {
+            // 从Scene的userData中获取主控制器实例
+            Scene currentScene = restaurantNameLabel.getScene();
+            if (currentScene != null) {
+                mainController = (CustomerMainController) currentScene.getUserData();
+                if (mainController != null) {
+                    mainController.addToCart(item);
+                    showAlert("成功", "已添加到购物车");
+                } else {
+                    showAlert("错误", "无法添加到购物车：未找到主控制器");
+                }
+            } else {
+                // System.out.println("currentScene is null");
+                showAlert("错误", "无法添加到购物车：未找到场景");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("错误", "添加到购物车失败: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -140,6 +159,19 @@ private void loadReviews() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/customer-main.fxml"));
             Scene scene = new Scene(loader.load());
+            
+            // 获取当前的CustomerMainController实例
+            CustomerMainController currentMainController = (CustomerMainController) restaurantNameLabel.getScene().getUserData();
+            if (currentMainController != null) {
+                // 获取新创建的CustomerMainController实例
+                CustomerMainController newController = loader.getController();
+                
+                // 将购物车数据从当前控制器复制到新控制器
+                for (CartItem item : currentMainController.getCartItems()) {
+                    newController.addToCart(item.getMenuItem());
+                }
+            }
+            
             Stage stage = (Stage) restaurantNameLabel.getScene().getWindow();
             stage.setScene(scene);
         } catch (Exception e) {

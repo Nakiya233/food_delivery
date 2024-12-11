@@ -11,12 +11,15 @@ import java.util.List;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import com.example.food_delivery.model.CartItem;
+import java.math.BigDecimal;
+import com.example.food_delivery.model.MenuItem;
 
 public class CustomerMainController {
     @FXML
     private ListView<Restaurant> restaurantListView;
     @FXML
-    private ListView<String> cartListView;
+    private ListView<CartItem> cartListView;
     @FXML
     private TextField searchField;
     @FXML
@@ -24,6 +27,8 @@ public class CustomerMainController {
 
     private RestaurantDAO restaurantDAO;
     private ObservableList<Restaurant> restaurants;
+    private ObservableList<CartItem> cartItems;
+    private BigDecimal totalPrice = BigDecimal.ZERO;
 
     @FXML
     private void initialize() {
@@ -55,6 +60,26 @@ public class CustomerMainController {
                 Restaurant selectedRestaurant = restaurantListView.getSelectionModel().getSelectedItem();
                 if (selectedRestaurant != null) {
                     showRestaurantMenu(selectedRestaurant);
+                }
+            }
+        });
+
+        cartItems = FXCollections.observableArrayList();
+        cartListView.setItems(cartItems);
+        updateTotalPrice();
+
+        // 自定义单元格显示
+        cartListView.setCellFactory(lv -> new ListCell<CartItem>() {
+            @Override
+            protected void updateItem(CartItem item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%s x%d ¥%s",
+                            item.getMenuItem().getItemName(),
+                            item.getQuantity(),
+                            item.getMenuItem().getPrice().multiply(BigDecimal.valueOf(item.getQuantity()))));
                 }
             }
         });
@@ -94,7 +119,30 @@ public class CustomerMainController {
 
     @FXML
     private void handleCheckout() {
-        showAlert("提示", "结算功能尚未实现");
+        if (cartItems.isEmpty()) {
+            showAlert("提示", "购物车为空");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("确认支付");
+        alert.setHeaderText(null);
+        alert.setContentText("总金额: ¥" + totalPrice + "\n确认支付?");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                // TODO: 实现实际的支付逻辑
+                cartItems.clear();
+                updateTotalPrice();
+                showAlert("成功", "支付成功");
+            }
+        });
+    }
+
+    @FXML
+    private void handleClearCart() {
+        cartItems.clear();
+        updateTotalPrice();
     }
 
     @FXML
@@ -131,11 +179,63 @@ public class CustomerMainController {
             RestaurantMenuController controller = loader.getController();
             controller.setRestaurant(restaurant);
             
+            // 将当前控制器实例存储在Scene的userData中
+            scene.setUserData(this);
+            
             Stage stage = (Stage) restaurantListView.getScene().getWindow();
             stage.setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("错误", "无法打开餐厅菜单: " + e.getMessage());
         }
+    }
+
+    public void addToCart(MenuItem menuItem) {
+        if (menuItem == null) {
+            showAlert("错误", "无效的菜品");
+            return;
+        }
+
+        try {
+            // 检查购物车中是否已存在该商品
+            boolean found = false;
+            for (CartItem item : cartItems) {
+                if (item.getMenuItem().getMenuId().equals(menuItem.getMenuId())) {
+                    item.setQuantity(item.getQuantity() + 1);
+                    found = true;
+                    break;
+                }
+            }
+
+            // 如果不存在，添加新的购物车项
+            if (!found) {
+                cartItems.add(new CartItem(menuItem, 1));
+            }
+
+            // 强制刷新UI
+            cartListView.refresh();
+            updateTotalPrice();
+            
+            // 可选：打印调试信息
+            // System.out.println("购物车项数量: " + cartItems.size());
+            // for (CartItem item : cartItems) {
+            //     System.out.println("项目: " + item.getMenuItem().getItemName() + " x" + item.getQuantity());
+            // }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("错误", "添加到购物车失败: " + e.getMessage());
+        }
+    }
+
+    private void updateTotalPrice() {
+        totalPrice = cartItems.stream()
+            .map(item -> item.getMenuItem().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalPriceLabel.setText(String.format("¥%.2f", totalPrice));
+        cartListView.refresh();
+    }
+
+    public ObservableList<CartItem> getCartItems() {
+        return cartItems;
     }
 } 
